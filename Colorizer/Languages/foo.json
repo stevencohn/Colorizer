@@ -1,0 +1,23 @@
+{
+  "name": "Foo",
+  "rules": [
+    {
+      "pattern": "(//.*?)\\r?$",
+      "captures": [
+        "Comment"
+      ]
+    },
+    {
+      "pattern": "\b(foo|bar)\b",
+      "captures": [
+        "Keyword"
+      ]
+    },
+    {
+      "pattern": "\b([0-9]{1,})\b",
+      "captures": [
+        "Number"
+      ]
+    }
+  ]
+}

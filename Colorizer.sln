@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorizerTests", "ColorizerTests\ColorizerTests.csproj", "{5CF0FF33-65E2-4383-92E0-3A2C8CA073D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colorizer", "Colorizer\Colorizer.csproj", "{06C4FE56-4FD8-4F1F-B471-9803270FDA08}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CF0FF33-65E2-4383-92E0-3A2C8CA073D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF0FF33-65E2-4383-92E0-3A2C8CA073D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF0FF33-65E2-4383-92E0-3A2C8CA073D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF0FF33-65E2-4383-92E0-3A2C8CA073D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06C4FE56-4FD8-4F1F-B471-9803270FDA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06C4FE56-4FD8-4F1F-B471-9803270FDA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06C4FE56-4FD8-4F1F-B471-9803270FDA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06C4FE56-4FD8-4F1F-B471-9803270FDA08}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F31C37D7-8D21-4AD4-8350-1975EA7CFE3D}
+	EndGlobalSection
+EndGlobal

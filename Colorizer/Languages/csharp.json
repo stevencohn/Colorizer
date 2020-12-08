@@ -1,0 +1,32 @@
+{
+  "name": "CSharp",
+  "alias": "css",
+  "rules": [
+    {
+      "pattern": "/\\*([^*]|[\\r\\n]|(\\*+([^*\/]|[\\r\\n])))*\\*+/",
+      "captures": [
+        "Comment"
+      ]
+    },
+    {
+      "pattern": "(///)(?:\\s*?(<[/a-zA-Z0-9\\s\"=]+>))*([^\\r\\n]*)",
+      "captures": [
+        "XmlDocTag",
+        "XmlDocTag",
+        "XmlDocComment"
+      ]
+    },
+    {
+      "pattern": "(//.*?)\\r?$",
+      "captures": [
+        "Comment"
+      ]
+    },
+    {
+      "pattern": "'[^\\n]*?(?<!\\)'",
+      "captureS": [
+        "String"
+      ]
+    }
+  ]
+}

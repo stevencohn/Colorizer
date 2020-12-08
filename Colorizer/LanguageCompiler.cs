@@ -20,8 +20,10 @@ namespace River.OneMore.Colorizer
 		{
             var builder = new StringBuilder();
 
+            // ignore pattern whitespace
             builder.AppendLine("(?x)");
 
+            // 0th capture is always the entire string
 			var scopes = new List<string>
 			{
 				"All"
@@ -39,8 +41,11 @@ namespace River.OneMore.Colorizer
                     builder.AppendLine();
                 }
 
+                // ?-xis = enables pattern whitespace, case sensitivity, multi line
+                // ?m = enables multi line
                 builder.Append("(?-xis)(?m)(");
                 builder.Append(rule.Pattern);
+                // ?x ignores pattern whitespace again
                 builder.AppendLine(")(?x)");
 
                 scopes.AddRange(rule.Captures);

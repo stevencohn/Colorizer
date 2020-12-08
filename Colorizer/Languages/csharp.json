@@ -1,6 +1,5 @@
 {
   "name": "CSharp",
-  "alias": "css",
   "rules": [
     {
       "pattern": "/\\*([^*]|[\\r\\n]|(\\*+([^*\/]|[\\r\\n])))*\\*+/",
@@ -24,7 +23,7 @@
     },
     {
       "pattern": "'[^\\n]*?(?<!\\)'",
-      "captureS": [
+      "captures": [
         "String"
       ]
     }

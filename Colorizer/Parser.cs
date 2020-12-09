@@ -46,29 +46,43 @@ namespace River.OneMoreAddIn.Colorizer
 					report(source.Substring(index, match.Index - index), null);
 				}
 
-				var run = source.Substring(match.Index, match.Length);
-				if (!string.IsNullOrEmpty(run))
+				if (match.Length > 0)
 				{
-					// Groups will contain a list of all possible captures in the regex, for both
-					// successful and unsuccessful captures. The 0th entry is the capture but
-					// doesn't indicate the group name. The next Successful entry is this capture
-					// and indicates the group name which should be an index offset of the capture
-					// in the entire regex; we can use that to index the appropriate scope.
+					var run = source.Substring(match.Index, match.Length);
+					if (!string.IsNullOrEmpty(run))
+					{
+						// Groups will contain a list of all possible captures in the regex, for both
+						// successful and unsuccessful captures. The 0th entry is the capture but
+						// doesn't indicate the group name. The next Successful entry is this capture
+						// and indicates the group name which should be an index offset of the capture
+						// in the entire regex; we can use that to index the appropriate scope.
 
+						var group = match.Groups.Cast<Group>().Skip(1).FirstOrDefault(g => g.Success);
+
+						if ((group != null) && int.TryParse(group.Name, out var scope))
+						{
+							report(run, language.Scopes[scope]);
+						}
+						else
+						{
+							// shouldn't happen but report as default text anyway
+							report(run, null);
+						}
+					}
+
+					index = match.Index + match.Length;
+				}
+				else
+				{
+					// captured end-of-line?
 					var group = match.Groups.Cast<Group>().Skip(1).FirstOrDefault(g => g.Success);
 
 					if ((group != null) && int.TryParse(group.Name, out var scope))
 					{
-						report(run, language.Scopes[scope]);
-					}
-					else
-					{
-						// shouldn't happen but report as default text anyway
-						report(run, null);
+						report(string.Empty, language.Scopes[scope]);
 					}
 				}
 
-				index = match.Index + match.Length;
 				match = match.NextMatch();
 			}
 		}

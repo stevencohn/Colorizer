@@ -74,6 +74,7 @@
     <Compile Include="CompiledLanguage.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="LanguageCompiler.cs" />
+    <Compile Include="LanguageParser.cs" />
     <Compile Include="LanguageProvider.cs" />
     <Compile Include="LanguageRule.cs" />
     <Compile Include="Program.cs" />

@@ -2,7 +2,7 @@
 // Copyright © 2020 Steven M Cohn.  All rights reserved.
 //************************************************************************************************                
 
-namespace River.OneMore.Colorizer
+namespace River.OneMoreAddIn.Colorizer
 {
 	using System.Collections.Generic;
 

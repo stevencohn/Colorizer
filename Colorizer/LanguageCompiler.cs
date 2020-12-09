@@ -2,82 +2,85 @@
 // Copyright © 2020 Steven M Cohn.  All rights reserved.
 //************************************************************************************************                
 
-namespace River.OneMore.Colorizer
+namespace River.OneMoreAddIn.Colorizer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Text.RegularExpressions;
+	using System;
+	using System.Collections.Generic;
+	using System.Text;
+	using System.Text.RegularExpressions;
 
 
-    internal static class LanguageCompiler
+	internal static class LanguageCompiler
 	{
-        private static readonly Regex captureCountRegex = 
-            new Regex(@"(?x)(?<!(\\|(?!\\)\(\?))\((?!\?)", RegexOptions.Compiled);
+		private static readonly Regex captureCountRegex =
+			new Regex(@"(?x)(?<!(\\|(?!\\)\(\?))\((?!\?)", RegexOptions.Compiled);
 
 
-        public static CompiledLanguage Compile(ILanguage language)
+		public static void Compile(ILanguage language)
 		{
-            var builder = new StringBuilder();
+			var builder = new StringBuilder();
 
-            // ignore pattern whitespace
-            builder.AppendLine("(?x)");
+			// ignore pattern whitespace
+			builder.AppendLine("(?x)");
 
-            // 0th capture is always the entire string
+			// 0th capture is always the entire string
 			var scopes = new List<string>
 			{
 				"All"
 			};
 
 			for (int i = 0; i < language.Rules.Count; i++)
-            {
-                var rule = language.Rules[i];
-                ValidateRule(language, rule, i);
+			{
+				var rule = language.Rules[i];
+				ValidateRule(language, rule, i);
 
-                if (i > 0)
-                {
-                    builder.AppendLine();
-                    builder.AppendLine("|");
-                    builder.AppendLine();
-                }
+				if (i > 0)
+				{
+					builder.AppendLine();
+					builder.AppendLine("|");
+					builder.AppendLine();
+				}
 
-                // ?-xis = enables pattern whitespace, case sensitivity, multi line
-                // ?m = enables multi line
-                builder.Append("(?-xis)(?m)(?:");
-                builder.Append(rule.Pattern);
-                // ?x ignores pattern whitespace again
-                builder.AppendLine(")(?x)");
+				// ?-xis = enables pattern whitespace, case sensitivity, multi line
+				// ?m = enables multi line
+				builder.Append("(?-xis)(?m)(?:");
+				builder.Append(rule.Pattern);
+				// ?x ignores pattern whitespace again
+				builder.AppendLine(")(?x)");
 
-                scopes.AddRange(rule.Captures);
-            }
+				scopes.AddRange(rule.Captures);
+			}
 
-            return new CompiledLanguage(
-                language.Name,
-                new Regex(builder.ToString()),
-                scopes);
-        }
+			var compiled = (Language)language;
+			compiled.Rules.Clear();
+			compiled.Regex = new Regex(builder.ToString());
+			compiled.Scopes = scopes;
+		}
 
 
-        private static void ValidateRule(ILanguage language, ILanguageRule rule, int i)
+		private static void ValidateRule(ILanguage language, ILanguageRule rule, int ruleNum)
 		{
-            if (string.IsNullOrWhiteSpace(rule.Pattern))
+			if (string.IsNullOrWhiteSpace(rule.Pattern))
 			{
-                throw new ArgumentNullException(
-                    $"empty pattern in {language.Name} rule {i}");
+				throw new LanguageException(
+					string.Format("{0} rule {1} has an empty pattern", language.Name, ruleNum),
+					language.Name, ruleNum);
 			}
 
-            if (rule.Captures == null || rule.Captures.Count == 0)
+			if (rule.Captures == null || rule.Captures.Count == 0)
 			{
-                throw new ArgumentOutOfRangeException(
-                    $"no captures defined in {language.Name} rule {i}");
+				throw new LanguageException(
+					string.Format("{0} rule {1} does not have defined captures", language.Name, ruleNum),
+					language.Name, ruleNum);
 			}
 
-            var count = captureCountRegex.Matches(rule.Pattern).Count;
-            if (count != rule.Captures.Count)
-            {
-                throw new DataMisalignedException(
-                    $"Capture misalignment in {language.Name} rule {i}");
-            }
-        }
-    }
+			var count = captureCountRegex.Matches(rule.Pattern).Count;
+			if (count != rule.Captures.Count)
+			{
+				throw new LanguageException(
+					string.Format("{0} rule {1} has misalignment captures", language.Name, ruleNum),
+					language.Name, ruleNum);
+			}
+		}
+	}
 }

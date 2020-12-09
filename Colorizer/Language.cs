@@ -2,9 +2,10 @@
 // Copyright © 2020 Steven M Cohn.  All rights reserved.
 //************************************************************************************************                
 
-namespace River.OneMore.Colorizer
+namespace River.OneMoreAddIn.Colorizer
 {
 	using System.Collections.Generic;
+	using System.Text.RegularExpressions;
 
 
 	/// <summary>
@@ -27,19 +28,43 @@ namespace River.OneMore.Colorizer
 		/// <summary>
 		/// Get the list of rules that define the language
 		/// </summary>
+		/// <remarks>
+		/// This list only exists until the language is compiled and then it is cleared.
+		/// </remarks>
 		List<ILanguageRule> Rules { get; }
+	}
+
+
+	/// <summary>
+	/// Defines the extended properties for a compiled language including its compiled
+	/// regular expression and the ordered list of scopes expected in that expression.
+	/// </summary>
+	internal interface ICompiledLanguage : ILanguage
+	{
+		/// <summary>
+		/// The compiled pattern matching expression, combined from all language rules
+		/// </summary>
+		Regex Regex { get; }
+
+
+		/// <summary>
+		/// The ordered list of scopes in the compiled regular expression
+		/// </summary>
+		IList<string> Scopes { get; }
 	}
 
 
 	/// <summary>
 	/// Used only for deserialization; the interface is used thereafter
 	/// </summary>
-	internal class Language : ILanguage
+	internal class Language : ICompiledLanguage
 	{
 		public Language()
 		{
 		}
 
+
+		// Definition...
 
 		public string Name { get; set; }
 
@@ -48,5 +73,13 @@ namespace River.OneMore.Colorizer
 
 
 		public List<ILanguageRule> Rules { get; set; }
+
+
+		// Compilation...
+
+		public Regex Regex { get; set; }
+
+
+		public IList<string> Scopes { get; set; }
 	}
 }

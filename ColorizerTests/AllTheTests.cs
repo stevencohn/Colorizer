@@ -37,9 +37,9 @@ namespace ColorizerTests
 			Console.WriteLine(interpreter.Regex.ToString());
 
 			var parser = new LanguageParser(interpreter);
-			parser.Parse("foo 123", (code, scope) =>
+			parser.Parse("foo bar 123 88 // adsfl kas falksfd", (code, scope) =>
 			{
-				Console.WriteLine($"{code} ({scope})");
+				Console.WriteLine($"'{code}' ({scope})");
 			});
 		}
 	}

@@ -2,25 +2,26 @@
 // Copyright © 2020 Steven M Cohn.  All rights reserved.
 //************************************************************************************************                
 
-namespace River.OneMore.Colorizer
+namespace River.OneMoreAddIn.Colorizer
 {
 	using System;
-
+	using System.Linq;
+	using System.Text.RegularExpressions;
 
 	internal class LanguageParser
 	{
-		private readonly CompiledLanguage interpreter;
+		private readonly ICompiledLanguage language;
 
 
-		public LanguageParser(CompiledLanguage interpreter)
+		public LanguageParser(ICompiledLanguage language)
 		{
-			this.interpreter = interpreter;
+			this.language = language;
 		}
 
 
 		public void Parse(string source, Action<string, string> report)
 		{
-			var match = interpreter.Regex.Match(source);
+			var match = language.Regex.Match(source);
 
 			if (!match.Success)
 			{
@@ -29,7 +30,6 @@ namespace River.OneMore.Colorizer
 			}
 
 			var index = 0;
-			var scope = 0;
 
 			while (match.Success)
 			{
@@ -42,12 +42,21 @@ namespace River.OneMore.Colorizer
 				var run = source.Substring(match.Index, match.Length);
 				if (!string.IsNullOrEmpty(run))
 				{
-					report(run, interpreter.Scopes[scope]);
+
+					var group = match.Groups.Cast<Group>().Skip(1).FirstOrDefault(g => g.Success);
+					if (int.TryParse(group.Name, out var scope))
+					{
+						report(run, language.Scopes[scope]);
+					}
+					else
+					{
+						// shouldn't happen but report as default text anyway
+						report(run, null);
+					}
 				}
 
 				index = match.Index + match.Length;
 				match = match.NextMatch();
-				scope++;
 			}
 		}
 	}

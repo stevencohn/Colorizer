@@ -71,9 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompiledLanguage.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="LanguageCompiler.cs" />
+    <Compile Include="LanguageException.cs" />
     <Compile Include="LanguageParser.cs" />
     <Compile Include="LanguageProvider.cs" />
     <Compile Include="LanguageRule.cs" />

@@ -43,7 +43,7 @@ namespace River.OneMore.Colorizer
 
                 // ?-xis = enables pattern whitespace, case sensitivity, multi line
                 // ?m = enables multi line
-                builder.Append("(?-xis)(?m)(");
+                builder.Append("(?-xis)(?m)(?:");
                 builder.Append(rule.Pattern);
                 // ?x ignores pattern whitespace again
                 builder.AppendLine(")(?x)");

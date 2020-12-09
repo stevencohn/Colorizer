@@ -26,15 +26,21 @@ namespace ColorizerTests
 			Assert.IsTrue(language.Rules[0].Captures.Count > 0);
 			Assert.AreEqual(language.Rules[0].Captures[0], "Comment");
 
-			var compiled = LanguageCompiler.Compile(language);
+			var interpreter = LanguageCompiler.Compile(language);
 
-			Assert.IsNotNull(compiled);
-			Assert.AreEqual(compiled.Name, language.Name);
-			Assert.IsNotNull(compiled.Regex);
-			Assert.IsNotNull(compiled.Scopes);
-			Assert.IsTrue(compiled.Scopes.Count > 0);
+			Assert.IsNotNull(interpreter);
+			Assert.AreEqual(interpreter.Name, language.Name);
+			Assert.IsNotNull(interpreter.Regex);
+			Assert.IsNotNull(interpreter.Scopes);
+			Assert.IsTrue(interpreter.Scopes.Count > 0);
 
-			Console.WriteLine(compiled.Regex.ToString());
+			Console.WriteLine(interpreter.Regex.ToString());
+
+			var parser = new LanguageParser(interpreter);
+			parser.Parse(" foo 123 ", (code, scope) =>
+			{
+				Console.WriteLine($"{code} ({scope})");
+			});
 		}
 	}
 }

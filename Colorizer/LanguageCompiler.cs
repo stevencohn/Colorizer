@@ -4,7 +4,6 @@
 
 namespace River.OneMoreAddIn.Colorizer
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Text;
 	using System.Text.RegularExpressions;
@@ -12,11 +11,14 @@ namespace River.OneMoreAddIn.Colorizer
 
 	internal static class LanguageCompiler
 	{
-		private static readonly Regex captureCountRegex =
+		private static readonly Regex capturePattern =
 			new Regex(@"(?x)(?<!(\\|(?!\\)\(\?))\((?!\?)", RegexOptions.Compiled);
 
+		private static readonly Regex namedPattern =
+			new Regex(@"(?<!(\\|(?!\\)\(\?))\((\?<\w+>)", RegexOptions.Compiled);
 
-		public static void Compile(ILanguage language)
+
+		public static ICompiledLanguage Compile(ILanguage language)
 		{
 			var builder = new StringBuilder();
 
@@ -36,6 +38,7 @@ namespace River.OneMoreAddIn.Colorizer
 
 				if (i > 0)
 				{
+					// add a visually significant separator between rules to ease debugging
 					builder.AppendLine();
 					builder.AppendLine("|");
 					builder.AppendLine();
@@ -55,6 +58,8 @@ namespace River.OneMoreAddIn.Colorizer
 			compiled.Rules.Clear();
 			compiled.Regex = new Regex(builder.ToString());
 			compiled.Scopes = scopes;
+
+			return compiled;
 		}
 
 
@@ -74,11 +79,18 @@ namespace River.OneMoreAddIn.Colorizer
 					language.Name, ruleNum);
 			}
 
-			var count = captureCountRegex.Matches(rule.Pattern).Count;
+			var count = capturePattern.Matches(rule.Pattern).Count;
 			if (count != rule.Captures.Count)
 			{
 				throw new LanguageException(
 					string.Format("{0} rule {1} has misalignment captures", language.Name, ruleNum),
+					language.Name, ruleNum);
+			}
+
+			if (namedPattern.Match(rule.Pattern).Success)
+			{
+				throw new LanguageException(
+					string.Format("{0} rule {1} cannot contain a named group", language.Name, ruleNum),
 					language.Name, ruleNum);
 			}
 		}

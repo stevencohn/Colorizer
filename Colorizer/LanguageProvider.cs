@@ -12,6 +12,12 @@ namespace River.OneMoreAddIn.Colorizer
 
 	internal class LanguageProvider
 	{
+
+		/// <summary>
+		/// Loads a language from the given file path
+		/// </summary>
+		/// <param name="path">The path to the language json definition file</param>
+		/// <returns>An ILanguage describing the langauge</returns>
 		public static ILanguage Read(string path)
 		{
 			var serializeOptions = new JsonSerializerOptions
@@ -22,6 +28,7 @@ namespace River.OneMoreAddIn.Colorizer
 
 				Converters =
 				{
+					// handles interface->class conversion
 					new RuleConverter()
 				}
 			};
@@ -39,12 +46,14 @@ namespace River.OneMoreAddIn.Colorizer
 		public override ILanguageRule Read(
 			ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
+			// convert from ILanguageRule to LanguageRule
 			return JsonSerializer.Deserialize<LanguageRule>(ref reader, options);
 		}
 
 		public override void Write(
 			Utf8JsonWriter writer, ILanguageRule value, JsonSerializerOptions options)
 		{
+			// we're not serializing so this isn't used
 			throw new NotImplementedException();
 		}
 	}

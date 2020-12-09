@@ -36,7 +36,8 @@ namespace River.OneMoreAddIn.Colorizer
 
 
 		/// <summary>
-		/// Gets or sets the index of the suspect rule or -1 if exception is not associated with a rule
+		/// Gets or sets the index of the suspect rule or -1 if exception is not
+		/// associated with a rule
 		/// </summary>
 		public int Rule { get; set; }
 	}

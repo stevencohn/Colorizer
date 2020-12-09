@@ -20,7 +20,8 @@ namespace River.OneMoreAddIn.Colorizer
 
 
 		/// <summary>
-		/// Gets the pattern of the first line of a source file. Can be null
+		/// Gets the pattern of the first line of a source file. Can be null.
+		/// Useful for languages such as XML or ASP.NET with a declarative first line
 		/// </summary>
 		string PreamblePattern { get; }
 
@@ -55,7 +56,8 @@ namespace River.OneMoreAddIn.Colorizer
 
 
 	/// <summary>
-	/// Used only for deserialization; the interface is used thereafter
+	/// Used only for deserialization (and a little sneaky use in the compiler).
+	/// The interface is used thereafter.
 	/// </summary>
 	internal class Language : ICompiledLanguage
 	{

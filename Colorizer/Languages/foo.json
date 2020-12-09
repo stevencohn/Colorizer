@@ -18,6 +18,15 @@
       "captures": [
         "Number"
       ]
+    },
+    {
+      "pattern": "\\b((a|b|c)([+-*\\\\])(x|y|z)\\b",
+      "captures": [
+        "Nested",
+        "Operand1",
+        "Operator",
+        "Operand2"
+      ]
     }
   ]
 }

@@ -2,8 +2,9 @@
 namespace ColorizerTests
 {
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
-	using River.OneMore.Colorizer;
+	using River.OneMoreAddIn.Colorizer;
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
 
@@ -26,21 +27,40 @@ namespace ColorizerTests
 			Assert.IsTrue(language.Rules[0].Captures.Count > 0);
 			Assert.AreEqual(language.Rules[0].Captures[0], "Comment");
 
-			var interpreter = LanguageCompiler.Compile(language);
+			var compiled = LanguageCompiler.Compile(language);
 
-			Assert.IsNotNull(interpreter);
-			Assert.AreEqual(interpreter.Name, language.Name);
-			Assert.IsNotNull(interpreter.Regex);
-			Assert.IsNotNull(interpreter.Scopes);
-			Assert.IsTrue(interpreter.Scopes.Count > 0);
+			Assert.IsNotNull(compiled.Regex);
+			Assert.IsNotNull(compiled.Scopes);
+			Assert.IsTrue(compiled.Scopes.Count > 0);
 
-			Console.WriteLine(interpreter.Regex.ToString());
+			Console.WriteLine(compiled.Regex.ToString());
 
-			var parser = new LanguageParser(interpreter);
-			parser.Parse("foo bar 123 88 // adsfl kas falksfd", (code, scope) =>
+			var parser = new LanguageParser(compiled);
+			parser.Parse("foo bar 123 88\n// adsfl kas falksfd", (code, scope) =>
 			{
 				Console.WriteLine($"'{code}' ({scope})");
 			});
+		}
+
+
+		[TestMethod]
+		[ExpectedException(typeof(LanguageException))]
+		public void NamedTes()
+		{
+			var language = new Language
+			{
+				Name = "foo",
+				Rules = new List<ILanguageRule>
+				{
+					new LanguageRule
+					{
+						Pattern = @"\\b(?<keyword>foo|bar)\\b",
+						Captures = new List<string> { "Keyword" }
+					}
+				}
+			};
+
+			var compiled = LanguageCompiler.Compile(language);
 		}
 	}
 }

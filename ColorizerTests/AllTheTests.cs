@@ -7,13 +7,13 @@ namespace ColorizerTests
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
-
+	using System.Xml.Linq;
 
 	[TestClass]
 	public class AllTheTests
 	{
 		[TestMethod]
-		public void AllTests()
+		public void CompilerTests()
 		{
 			var path = Path.Combine(
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
@@ -61,6 +61,17 @@ namespace ColorizerTests
 			};
 
 			var compiled = Compiler.Compile(language);
+		}
+
+
+		[TestMethod]
+		public void ColorizerTests()
+		{
+			var colorizer = new Colorizer("foo");
+			var root = colorizer.Colorize("foo 123\n// blah");
+
+			Assert.IsNotNull(root);
+			Console.WriteLine(root.ToString());
 		}
 	}
 }

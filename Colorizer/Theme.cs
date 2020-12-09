@@ -7,6 +7,7 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Collections.Generic;
 	using System.Drawing;
 	using System.Linq;
+	using System.Text;
 
 
 	// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -40,6 +41,24 @@ namespace River.OneMoreAddIn.Colorizer
 
 		public string Apply(string code)
 		{
+			var builder = new StringBuilder();
+			if (!string.IsNullOrEmpty(Foreground))
+				builder.Append($"color:{Foreground};");
+
+			if (!string.IsNullOrEmpty(Background))
+				builder.Append($"background:{Background};");
+
+			if (Bold)
+				builder.Append("font-weight:bold;");
+
+			if (Italic)
+				builder.Append("font-style:italic;");
+
+			if (builder.Length > 0)
+			{
+				return $"<span style=\"{builder}\">{code}</span>";
+			}
+
 			return code;
 		}
 	}
@@ -80,10 +99,10 @@ namespace River.OneMoreAddIn.Colorizer
 
 		public void TranslateColorNames()
 		{
-			foreach (var style in Styles)
+			foreach (Style style in Styles)
 			{
-				TranslateColorName(style.Background);
-				TranslateColorName(style.Foreground);
+				style.Background = TranslateColorName(style.Background);
+				style.Foreground = TranslateColorName(style.Foreground);
 			}
 		}
 
@@ -91,14 +110,27 @@ namespace River.OneMoreAddIn.Colorizer
 		{
 			if (string.IsNullOrEmpty(color))
 			{
-				return DefaultPlainText;
+				return null;
 			}
 
-			// normalize color as 6-byte hex HTML color string
+			if (Colors.ContainsKey(color))
+			{
+				color = Colors[color];
 
-			//return ColorTranslator.FromHtml(color).ToRGBHtml();
-			var c = ColorTranslator.FromHtml(color);
-			return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+				// normalize color as 6-byte hex HTML color string
+
+				//return ColorTranslator.FromHtml(color).ToRGBHtml();
+				var c = ColorTranslator.FromHtml(color);
+				return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+			}
+
+			if (color.StartsWith("#"))
+			{
+				var c = ColorTranslator.FromHtml(color);
+				return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+			}
+
+			return color;
 		}
 	}
 }

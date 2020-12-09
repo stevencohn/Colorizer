@@ -14,16 +14,20 @@ namespace River.OneMoreAddIn.Colorizer
 	// Style...
 
 	/// <summary>
-	/// 
+	/// Defines minimum surface of Style needed beyond the Colorizer namespace
 	/// </summary>
 	internal interface IStyle
 	{
+		/// <summary>
+		/// Gets the name of this style, must be unique within the theme
+		/// </summary>
 		string Name { get; }
-		string Foreground { get; }
-		string Background { get; }
-		bool Bold { get; }
-		bool Italic { get; }
 
+		/// <summary>
+		/// Applies this style to the given string, returning a SPAN with a style attribute
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns></returns>
 		string Apply(string code);
 	}
 
@@ -68,14 +72,15 @@ namespace River.OneMoreAddIn.Colorizer
 	// Theme...
 
 	/// <summary>
-	/// 
+	/// Defines minimum surface of Theme needed beyond the Colorizer namespace
 	/// </summary>
 	internal interface ITheme
 	{
-		Dictionary<string, string> Colors { get; set; }
-
-		List<IStyle> Styles { get; set; }
-
+		/// <summary>
+		/// Gets the named style.
+		/// </summary>
+		/// <param name="name">The name of a style defined by this theme</param>
+		/// <returns>An IStyle of the style</returns>
 		IStyle GetStyle(string name);
 	}
 
@@ -85,8 +90,6 @@ namespace River.OneMoreAddIn.Colorizer
 	/// </summary>
 	internal class Theme : ITheme
 	{
-		private const string DefaultPlainText = "#FF000000";
-
 		public Dictionary<string, string> Colors { get; set; }
 
 		public List<IStyle> Styles { get; set; }
@@ -106,7 +109,7 @@ namespace River.OneMoreAddIn.Colorizer
 			}
 		}
 
-		public string TranslateColorName(string color)
+		private string TranslateColorName(string color)
 		{
 			if (string.IsNullOrEmpty(color))
 			{

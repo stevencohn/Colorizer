@@ -8,13 +8,13 @@
       ]
     },
     {
-      "pattern": "\b(foo|bar)\b",
+      "pattern": "\\b(foo|bar)\\b",
       "captures": [
         "Keyword"
       ]
     },
     {
-      "pattern": "\b([0-9]{1,})\b",
+      "pattern": "\\b([0-9]{1,})\\b",
       "captures": [
         "Number"
       ]

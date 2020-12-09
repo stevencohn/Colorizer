@@ -8,12 +8,12 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Linq;
 	using System.Text.RegularExpressions;
 
-	internal class LanguageParser
+	internal class Parser
 	{
 		private readonly ICompiledLanguage language;
 
 
-		public LanguageParser(ICompiledLanguage language)
+		public Parser(ICompiledLanguage language)
 		{
 			this.language = language;
 		}
@@ -40,7 +40,7 @@ namespace River.OneMoreAddIn.Colorizer
 
 			while (match.Success)
 			{
-				if (match.Index > index)
+				if (match.Index > index + 1)
 				{
 					// default text prior to match
 					report(source.Substring(index, match.Index - index), null);

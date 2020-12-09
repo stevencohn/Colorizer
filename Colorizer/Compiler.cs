@@ -9,7 +9,7 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Text.RegularExpressions;
 
 
-	internal static class LanguageCompiler
+	internal static class Compiler
 	{
 		private static readonly Regex capturePattern =
 			new Regex(@"(?x)(?<!(\\|(?!\\)\(\?))\((?!\?)", RegexOptions.Compiled);
@@ -22,13 +22,15 @@ namespace River.OneMoreAddIn.Colorizer
 		{
 			var builder = new StringBuilder();
 
-			// ignore pattern whitespace
-			builder.AppendLine("(?x)");
+			// ignore pattern whitespace (?x)
+			// include end-of-line capture ($)
+			builder.AppendLine("(?x)(?-xis)(?m)($)(?x)");
 
 			// 0th capture is always the entire string
+			// 1st capture is always the end-of-line
 			var scopes = new List<string>
 			{
-				"All"
+				"*", "$"
 			};
 
 			for (int i = 0; i < language.Rules.Count; i++)
@@ -36,13 +38,10 @@ namespace River.OneMoreAddIn.Colorizer
 				var rule = language.Rules[i];
 				ValidateRule(language, rule, i);
 
-				if (i > 0)
-				{
-					// add a visually significant separator between rules to ease debugging
-					builder.AppendLine();
-					builder.AppendLine("|");
-					builder.AppendLine();
-				}
+				// add a visually significant separator between rules to ease debugging
+				builder.AppendLine();
+				builder.AppendLine("|");
+				builder.AppendLine();
 
 				// ?-xis = enables pattern whitespace, case sensitivity, multi line
 				// ?m = enables multi line
@@ -63,7 +62,7 @@ namespace River.OneMoreAddIn.Colorizer
 		}
 
 
-		private static void ValidateRule(ILanguage language, ILanguageRule rule, int ruleNum)
+		private static void ValidateRule(ILanguage language, IRule rule, int ruleNum)
 		{
 			if (string.IsNullOrWhiteSpace(rule.Pattern))
 			{

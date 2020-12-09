@@ -19,7 +19,7 @@ namespace ColorizerTests
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
 				@"Languages\foo.json");
 			
-			var language = LanguageProvider.Read(path);
+			var language = Provider.LoadLanguage(path);
 
 			Assert.IsNotNull(language);
 			Assert.AreEqual(language.Name, "Foo");
@@ -27,7 +27,7 @@ namespace ColorizerTests
 			Assert.IsTrue(language.Rules[0].Captures.Count > 0);
 			Assert.AreEqual(language.Rules[0].Captures[0], "Comment");
 
-			var compiled = LanguageCompiler.Compile(language);
+			var compiled = Compiler.Compile(language);
 
 			Assert.IsNotNull(compiled.Regex);
 			Assert.IsNotNull(compiled.Scopes);
@@ -35,8 +35,8 @@ namespace ColorizerTests
 
 			Console.WriteLine(compiled.Regex.ToString());
 
-			var parser = new LanguageParser(compiled);
-			parser.Parse("foo bar 123 88\n// adsfl kas falksfd", (code, scope) =>
+			var parser = new Parser(compiled);
+			parser.Parse("foo 123\n// blah", (code, scope) =>
 			{
 				Console.WriteLine($"'{code}' ({scope})");
 			});
@@ -45,14 +45,14 @@ namespace ColorizerTests
 
 		[TestMethod]
 		[ExpectedException(typeof(LanguageException))]
-		public void NamedTes()
+		public void NamedTest()
 		{
 			var language = new Language
 			{
 				Name = "foo",
-				Rules = new List<ILanguageRule>
+				Rules = new List<IRule>
 				{
-					new LanguageRule
+					new Rule
 					{
 						Pattern = @"\\b(?<keyword>foo|bar)\\b",
 						Captures = new List<string> { "Keyword" }
@@ -60,7 +60,7 @@ namespace ColorizerTests
 				}
 			};
 
-			var compiled = LanguageCompiler.Compile(language);
+			var compiled = Compiler.Compile(language);
 		}
 	}
 }

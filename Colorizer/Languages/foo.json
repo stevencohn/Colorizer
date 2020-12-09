@@ -20,7 +20,7 @@
       ]
     },
     {
-      "pattern": "\\b((a|b|c)([+-*\\\\])(x|y|z)\\b",
+      "pattern": "\\b((a|b|c)([+\\-*\\\\])(x|y|z))\\b",
       "captures": [
         "Nested",
         "Operand1",

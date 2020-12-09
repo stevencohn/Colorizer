@@ -8,6 +8,48 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Text.RegularExpressions;
 
 
+	// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+	// Rule...
+
+	/// <summary>
+	/// Defines a single rule for the language such as comments, string, or keywords.
+	/// </summary>
+	internal interface IRule
+	{
+		/// <summary>
+		/// Gets a regular expression that defines what the rule matches and captures
+		/// </summary>
+		string Pattern { get; }
+
+
+		/// <summary>
+		/// Gets the scope of each capture in the regular expression
+		/// </summary>
+		IList<string> Captures { get; }
+
+	}
+
+
+	/// <summary>
+	/// Used only for deserialization; the interface is used thereafter
+	/// </summary>
+	internal class Rule : IRule
+	{
+		public Rule()
+		{
+		}
+
+
+		public string Pattern { get; set; }
+
+
+		public IList<string> Captures { get; set; }
+	}
+
+
+	// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+	// Language...
+
 	/// <summary>
 	/// Defines how to parse the source code of a given language
 	/// </summary>
@@ -32,7 +74,7 @@ namespace River.OneMoreAddIn.Colorizer
 		/// <remarks>
 		/// This list only exists until the language is compiled and then it is cleared.
 		/// </remarks>
-		List<ILanguageRule> Rules { get; }
+		List<IRule> Rules { get; }
 	}
 
 
@@ -74,7 +116,7 @@ namespace River.OneMoreAddIn.Colorizer
 		public string PreamblePattern { get; set; }
 
 
-		public List<ILanguageRule> Rules { get; set; }
+		public List<IRule> Rules { get; set; }
 
 
 		// Compilation...

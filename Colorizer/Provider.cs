@@ -10,7 +10,7 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Text.Json.Serialization;
 
 
-	internal class LanguageProvider
+	internal class Provider
 	{
 
 		/// <summary>
@@ -18,7 +18,7 @@ namespace River.OneMoreAddIn.Colorizer
 		/// </summary>
 		/// <param name="path">The path to the language json definition file</param>
 		/// <returns>An ILanguage describing the langauge</returns>
-		public static ILanguage Read(string path)
+		public static ILanguage LoadLanguage(string path)
 		{
 			var serializeOptions = new JsonSerializerOptions
 			{
@@ -38,20 +38,62 @@ namespace River.OneMoreAddIn.Colorizer
 
 			return language;
 		}
+
+
+		public static ITheme LoadTheme(string path)
+		{
+			var serializeOptions = new JsonSerializerOptions
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+				ReadCommentHandling = JsonCommentHandling.Skip,
+				AllowTrailingCommas = true,
+
+				Converters =
+				{
+					// handles interface->class conversion
+					new StyleConverter()
+				}
+			};
+
+			var json = File.ReadAllText(path);
+			var theme = JsonSerializer.Deserialize<Theme>(json, serializeOptions);
+
+			theme.TranslateColorNames();
+
+			return theme;
+		}
 	}
 
 
-	internal class RuleConverter: JsonConverter<ILanguageRule>
+	internal class RuleConverter: JsonConverter<IRule>
 	{
-		public override ILanguageRule Read(
+		public override IRule Read(
 			ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			// convert from ILanguageRule to LanguageRule
-			return JsonSerializer.Deserialize<LanguageRule>(ref reader, options);
+			return JsonSerializer.Deserialize<Rule>(ref reader, options);
 		}
 
 		public override void Write(
-			Utf8JsonWriter writer, ILanguageRule value, JsonSerializerOptions options)
+			Utf8JsonWriter writer, IRule value, JsonSerializerOptions options)
+		{
+			// we're not serializing so this isn't used
+			throw new NotImplementedException();
+		}
+	}
+
+
+	internal class StyleConverter : JsonConverter<IStyle>
+	{
+		public override IStyle Read(
+			ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		{
+			// convert from ILanguageRule to LanguageRule
+			return JsonSerializer.Deserialize<Style>(ref reader, options);
+		}
+
+		public override void Write(
+			Utf8JsonWriter writer, IStyle value, JsonSerializerOptions options)
 		{
 			// we're not serializing so this isn't used
 			throw new NotImplementedException();

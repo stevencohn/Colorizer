@@ -2,7 +2,7 @@
   "name": "CSharp",
   "rules": [
     {
-      "pattern": "/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/",
+      "pattern": "(/\\*(?:[^*]|[\\r\\n]|(?:\\*+(?:[^*/]|[\\r\\n])))*\\*+/)",
       "captures": [
         "Comment"
       ]
@@ -22,13 +22,13 @@
       ]
     },
     {
-      "pattern": "'[^\\n]*?(?<!\\\\)'",
+      "pattern": "('[^\\n]*?(?<!\\\\)')",
       "captures": [
         "String"
       ]
     },
     {
-      "pattern": "(?s)@\"(?:\"\"|.)*?\"(?!\")",
+      "pattern": "(?s)(@\"(?:\"\"|.)*?\"(?!\"))",
       "captures": [
         "StringCSharpVerbatim"
       ]
@@ -59,16 +59,16 @@
       ]
     },
     {
-      "pattern": "\\b[0-9]{1,}\\b",
+      "pattern": "\\b([0-9]{1,})\\b",
       "captures": [
         "Number"
       ]
     },
-    {
-      "pattern": "\\b((?=<modifiers>public|protected|internal|private|abstract)?(?(?=<modifiers>) |[^]))[a-zA-Z][a-zA-Z0-9.]{1,})){1,}",
+    /*{
+      "pattern": "\\b(?:public|protected|internal|private|abstract)) |[^]))[a-zA-Z][a-zA-Z0-9.]{1,})){1,}",
       "captures": [
         "ClassName"
       ]
-    }
+    }*/
   ]
 }

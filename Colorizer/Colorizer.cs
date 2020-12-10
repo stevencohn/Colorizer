@@ -44,6 +44,8 @@ namespace River.OneMoreAddIn.Colorizer
 
 			parser.Parse(source, (code, scope) =>
 			{
+				//System.Console.WriteLine($"'{code}' ({scope})");
+
 				if (string.IsNullOrEmpty(code))
 				{
 					// end-of-line
@@ -59,7 +61,7 @@ namespace River.OneMoreAddIn.Colorizer
 					if (scope == null)
 					{
 						// plain text prior to capture
-						builder.Append(code);
+						builder.Append(code.Replace("\t", " "));
 					}
 					else
 					{

@@ -36,11 +36,16 @@ namespace River.OneMoreAddIn.Colorizer
 				return;
 			}
 
+			//Console.WriteLine($"source:\"{source}\"");
+
 			var index = 0;
 
 			while (match.Success)
 			{
-				if (match.Index > index + 1)
+				//Console.WriteLine(
+				//	$"index:{match.Index}:{index} length:{match.Length} value:\"{match.Value}\"");
+
+				if (match.Index > index)
 				{
 					// default text prior to match
 					report(source.Substring(index, match.Index - index), null);
@@ -77,6 +82,7 @@ namespace River.OneMoreAddIn.Colorizer
 					if ((group != null) && int.TryParse(group.Name, out var scope))
 					{
 						report(string.Empty, language.Scopes[scope]);
+						index++;
 					}
 				}
 

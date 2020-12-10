@@ -10,9 +10,13 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Xml.Linq;
 
 
+	/// <summary>
+	/// This colorizer is suited specifically to generating OneNote content
+	/// </summary>
 	internal class Colorizer
 	{
-		private readonly ILanguage language;
+		private readonly Parser parser;
+		private readonly ITheme theme;
 		private readonly string rootPath;
 
 
@@ -29,16 +33,14 @@ namespace River.OneMoreAddIn.Colorizer
 				throw new FileNotFoundException(path);
 			}
 
-			language = Provider.LoadLanguage(path);
+			parser = new Parser(Compiler.Compile(Provider.LoadLanguage(path)));
+
+			theme = Provider.LoadTheme(Path.Combine(rootPath, $"styles-light.json"));
 		}
 
 
 		public XElement Colorize(string source)
 		{
-			var parser = new Parser(Compiler.Compile(language));
-
-			var theme = Provider.LoadTheme(Path.Combine(rootPath, $"styles-light.json"));
-
 			var container = new XElement("OEChildren");
 			var builder = new StringBuilder();
 
@@ -72,6 +74,39 @@ namespace River.OneMoreAddIn.Colorizer
 			});
 
 			return container;
+		}
+
+
+		public string ColorizeOne(string source)
+		{
+			var builder = new StringBuilder();
+
+			parser.Parse(source, (code, scope) =>
+			{
+				//System.Console.WriteLine($"'{code}' ({scope})");
+
+				if (string.IsNullOrEmpty(code) && parser.HasMoreCaptures)
+				{
+					// end-of-line
+					builder.Append("<br/>");
+				}
+				else
+				{
+					if (scope == null)
+					{
+						// plain text prior to capture
+						// simple conversion of tabs to spaces (shouldn't be tabs in OneNote)
+						builder.Append(code.Replace("\t", " "));
+					}
+					else
+					{
+						var style = theme.GetStyle(scope);
+						builder.Append(style == null ? code : style.Apply(code));
+					}
+				}
+			});
+
+			return builder.ToString();
 		}
 	}
 }

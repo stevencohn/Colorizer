@@ -13,9 +13,13 @@ namespace Colorizer
 		static void Main(string[] args)
 		{
 			var colorizer = new Colorizer("foo");
-			var root = colorizer.Colorize("header\n\tfoo 123\n   // blah\nfooter");
 
+			var root = colorizer.Colorize("header\n\tfoo 123\n   // blah\nfooter");
 			Console.WriteLine(root.ToString());
+
+
+			var one = colorizer.ColorizeOne("foo\n123");
+			Console.WriteLine(one);
 		}
 	}
 }

@@ -8,15 +8,27 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Linq;
 	using System.Text.RegularExpressions;
 
+
 	internal class Parser
 	{
 		private readonly ICompiledLanguage language;
+		private MatchCollection matches;
+		private int captureIndex;
 
 
 		public Parser(ICompiledLanguage language)
 		{
 			this.language = language;
 		}
+
+
+		/// <summary>
+		/// Indicates whether there are more captures to come, not including the last line break;
+		/// can be used from within reporters, specifically for ColorizeOne
+		/// </summary>
+		public bool HasMoreCaptures
+			=> captureIndex < matches.Count - 1
+			|| (captureIndex == matches.Count - 1 && matches[captureIndex].Value.Length > 0);
 
 
 		/// <summary>
@@ -28,20 +40,24 @@ namespace River.OneMoreAddIn.Colorizer
 		/// </param>
 		public void Parse(string source, Action<string, string> report)
 		{
-			var match = language.Regex.Match(source);
+			matches = language.Regex.Matches(source);
 
-			if (!match.Success)
+			if (matches.Count == 0)
 			{
+				captureIndex = 0;
+
 				report(source, null);
 				return;
 			}
 
-			//Console.WriteLine($"source:\"{source}\"");
+			Console.WriteLine($"source:\"{source}\" captures:{matches.Count}");
 
 			var index = 0;
 
-			while (match.Success)
+			for (captureIndex = 0; captureIndex < matches.Count; captureIndex++)
 			{
+				var match = matches[captureIndex];
+
 				//Console.WriteLine(
 				//	$"index:{match.Index}:{index} length:{match.Length} value:\"{match.Value}\"");
 
@@ -76,7 +92,7 @@ namespace River.OneMoreAddIn.Colorizer
 				}
 				else
 				{
-					// captured end-of-line?
+					// captured end-of-line? or line break?
 					var group = match.Groups.Cast<Group>().Skip(1).FirstOrDefault(g => g.Success);
 
 					if ((group != null) && int.TryParse(group.Name, out var scope))
@@ -85,8 +101,6 @@ namespace River.OneMoreAddIn.Colorizer
 						index++;
 					}
 				}
-
-				match = match.NextMatch();
 			}
 
 			if (index < source.Length)

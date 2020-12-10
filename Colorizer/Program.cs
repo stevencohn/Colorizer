@@ -14,6 +14,7 @@ namespace Colorizer
 		{
 			Foo();
 			CSharp();
+			JavaScript();
 		}
 
 
@@ -41,6 +42,20 @@ namespace Colorizer
 
 			var one = colorizer.ColorizeOne(
 				"public void Foobar(int arg)\n{\n    var s = \"bubble\";\n}");
+
+			Console.WriteLine(one);
+		}
+
+
+		static void JavaScript()
+		{
+			Console.WriteLine();
+			Console.WriteLine("javascript-----------------------");
+
+			var colorizer = new Colorizer("javascript");
+
+			var one = colorizer.ColorizeOne(
+				"var foo;\nfor (x in obj)\n{\n  console.out(x);\n}");
 
 			Console.WriteLine(one);
 		}

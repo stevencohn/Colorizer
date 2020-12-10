@@ -23,8 +23,10 @@ namespace River.OneMoreAddIn.Colorizer
 			var builder = new StringBuilder();
 
 			// ignore pattern whitespace (?x)
+			builder.Append("(?x)");
 			// include end-of-line capture ($)
-			builder.AppendLine("(?x)(?-xis)(?m)($)(?x)");
+			builder.Append("(?-xis)(?m)($)(?x)");
+			builder.AppendLine();
 
 			// 0th capture is always the entire string
 			// 1st capture is always the end-of-line

@@ -44,6 +44,7 @@ namespace River.OneMoreAddIn.Colorizer
 				{
 					// default text prior to match
 					report(source.Substring(index, match.Index - index), null);
+					index = match.Index;
 				}
 
 				if (match.Length > 0)
@@ -58,12 +59,12 @@ namespace River.OneMoreAddIn.Colorizer
 
 					if ((group != null) && int.TryParse(group.Name, out var scope))
 					{
-						report(match.Value, language.Scopes[scope]);
+						report(source.Substring(match.Index, match.Length), language.Scopes[scope]);
 					}
 					else
 					{
 						// shouldn't happen but report as default text anyway
-						report(match.Value, null);
+						report(source.Substring(match.Index, match.Length), null);
 					}
 
 					index = match.Index + match.Length;

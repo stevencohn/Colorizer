@@ -68,7 +68,7 @@ namespace ColorizerTests
 		public void ColorizerTests()
 		{
 			var colorizer = new Colorizer("foo");
-			var root = colorizer.Colorize("foo 123\n// blah");
+			var root = colorizer.Colorize("header\nfoo 123\n// blah\nfooter");
 
 			Assert.IsNotNull(root);
 			Console.WriteLine(root.ToString());

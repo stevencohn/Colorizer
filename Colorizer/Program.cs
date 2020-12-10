@@ -15,6 +15,7 @@ namespace Colorizer
 			Foo();
 			CSharp();
 			JavaScript();
+			XML();
 		}
 
 
@@ -56,6 +57,20 @@ namespace Colorizer
 
 			var one = colorizer.ColorizeOne(
 				"var foo;\nfor (x in obj)\n{\n  console.out(x);\n}");
+
+			Console.WriteLine(one);
+		}
+
+
+		static void XML()
+		{
+			Console.WriteLine();
+			Console.WriteLine("xml------------------------------");
+
+			var colorizer = new Colorizer("xml");
+
+			var one = colorizer.ColorizeOne(
+				"<foo>\n<bar a=\'123\'>whatever</bar>\n</foo>");
 
 			Console.WriteLine(one);
 		}

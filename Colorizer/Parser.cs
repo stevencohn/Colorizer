@@ -26,6 +26,10 @@ namespace River.OneMoreAddIn.Colorizer
 		/// Indicates whether there are more captures to come, not including the last line break;
 		/// can be used from within reporters, specifically for ColorizeOne
 		/// </summary>
+		/// <remarks>
+		/// Filters out the end of the line token, implicitly matched by ($) but allows explicit
+		/// newline chars such as \n and \r
+		/// </remarks>
 		public bool HasMoreCaptures
 			=> captureIndex < matches.Count - 1
 			|| (captureIndex == matches.Count - 1 && matches[captureIndex].Value.Length > 0);

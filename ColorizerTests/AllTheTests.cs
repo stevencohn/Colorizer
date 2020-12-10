@@ -13,7 +13,7 @@ namespace ColorizerTests
 	public class AllTheTests
 	{
 		[TestMethod]
-		public void CompilerTests()
+		public void CompilerTest()
 		{
 			var path = Path.Combine(
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),

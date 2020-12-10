@@ -54,7 +54,7 @@ namespace River.OneMoreAddIn.Colorizer
 				return;
 			}
 
-			Console.WriteLine($"source:\"{source}\" captures:{matches.Count}");
+			Console.WriteLine($"captures:{matches.Count}\nsource:\"{source}\"\n");
 
 			var index = 0;
 

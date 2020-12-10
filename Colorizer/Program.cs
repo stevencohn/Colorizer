@@ -70,7 +70,7 @@ namespace Colorizer
 			var colorizer = new Colorizer("xml");
 
 			var one = colorizer.ColorizeOne(
-				"<foo>\n<bar a=\'123\'>whatever</bar>\n</foo>");
+"<!--comment-->\n<foo>\n  <bar a=\"123\">whatever</bar>\n  <const><![CDATA[value]]></const>\n</foo>");
 
 			Console.WriteLine(one);
 		}

@@ -5,6 +5,7 @@
 namespace River.OneMoreAddIn.Colorizer
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Text.RegularExpressions;
 
 
@@ -35,6 +36,9 @@ namespace River.OneMoreAddIn.Colorizer
 	/// </summary>
 	internal class Rule : IRule
 	{
+		private List<string> captures;
+
+
 		public Rule()
 		{
 		}
@@ -43,7 +47,13 @@ namespace River.OneMoreAddIn.Colorizer
 		public string Pattern { get; set; }
 
 
-		public IList<string> Captures { get; set; }
+		public IList<string> Captures
+		{
+			get => captures;
+
+			// standardize on lowercase names because users are stupid
+			set => captures = ((List<string>)value).ConvertAll(s => s.ToLower());
+		}
 	}
 
 

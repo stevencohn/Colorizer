@@ -104,6 +104,9 @@ namespace River.OneMoreAddIn.Colorizer
 		{
 			foreach (Style style in Styles)
 			{
+				// standardize on lowercase names because users are stupid
+				style.Name = style.Name.ToLower();
+
 				style.Background = TranslateColorName(style.Background);
 				style.Foreground = TranslateColorName(style.Foreground);
 			}

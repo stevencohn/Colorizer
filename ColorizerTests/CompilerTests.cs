@@ -7,10 +7,10 @@ namespace ColorizerTests
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
-	using System.Xml.Linq;
+
 
 	[TestClass]
-	public class AllTheTests
+	public class CompilerTests
 	{
 		[TestMethod]
 		public void CompilerTest()
@@ -18,14 +18,14 @@ namespace ColorizerTests
 			var path = Path.Combine(
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
 				@"Languages\foo.json");
-			
+
 			var language = Provider.LoadLanguage(path);
 
 			Assert.IsNotNull(language);
 			Assert.AreEqual(language.Name, "Foo");
 			Assert.IsTrue(language.Rules.Count > 0);
 			Assert.IsTrue(language.Rules[0].Captures.Count > 0);
-			Assert.AreEqual(language.Rules[0].Captures[0], "Comment");
+			Assert.AreEqual(language.Rules[0].Captures[0], "comment");
 
 			var compiled = Compiler.Compile(language);
 
@@ -61,17 +61,6 @@ namespace ColorizerTests
 			};
 
 			var compiled = Compiler.Compile(language);
-		}
-
-
-		[TestMethod]
-		public void ColorizerTests()
-		{
-			var colorizer = new Colorizer("foo");
-			var root = colorizer.Colorize("header\nfoo 123\n// blah\nfooter");
-
-			Assert.IsNotNull(root);
-			Console.WriteLine(root.ToString());
 		}
 	}
 }

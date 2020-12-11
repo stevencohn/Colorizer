@@ -38,7 +38,7 @@ namespace ColorizerTests
 			var parser = new Parser(compiled);
 			parser.Parse("foo 123\n// blah", (code, scope) =>
 			{
-				Console.WriteLine($"'{code}' ({scope})");
+				Console.WriteLine($"{scope ?? "SPACE"}: [{code}]");
 			});
 		}
 

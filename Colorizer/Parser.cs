@@ -9,6 +9,15 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.Text.RegularExpressions;
 
 
+	/// <summary>
+	/// Parses given source using the specified language and reports tokens and text runs
+	/// through an Action.
+	/// </summary>
+	/// <remarks>
+	/// Output from Parser is a stream of generic string/scope pairs. These can be formatted
+	/// for different visualizations such as HTML, RTF, or OneNote. See the Colorizer class
+	/// for a OneNote visualizer.
+	/// </remarks>
 	internal class Parser
 	{
 		private readonly ICompiledLanguage language;
@@ -37,10 +46,11 @@ namespace River.OneMoreAddIn.Colorizer
 
 		/// <summary>
 		/// Parse the given source code, invoking the specified reporter for each matched rule
+		/// as a string/scope pair through the provided Action
 		/// </summary>
 		/// <param name="source">The source code to parse</param>
 		/// <param name="report">
-		/// An action to invoke with the piece of source code and its scope name
+		/// An Action to invoke with the piece of source code and its scope name
 		/// </param>
 		public void Parse(string source, Action<string, string> report)
 		{
@@ -55,7 +65,6 @@ namespace River.OneMoreAddIn.Colorizer
 			if (matches.Count == 0)
 			{
 				captureIndex = 0;
-
 				report(source, null);
 				return;
 			}
@@ -84,17 +93,29 @@ namespace River.OneMoreAddIn.Colorizer
 					{
 						if (group.Index > index)
 						{
-							// default text prior to match
+							// default text prior to match or in between matches
 							report(source.Substring(index, group.Index - index), null);
 							index = group.Index;
 						}
 
 						if (int.TryParse(group.Name, out var scope))
 						{
+							var x = source.Substring(group.Index, group.Length);
+							if (x != group.Value)
+							{
+								throw new Exception($"value:{group.Value} != substr:{x}");
+							}
+
 							report(source.Substring(group.Index, group.Length), language.Scopes[scope]);
 						}
 						else
 						{
+							var x = source.Substring(group.Index, group.Length);
+							if (x != group.Value)
+							{
+								throw new Exception($"value:{group.Value} != substr:{x}");
+							}
+
 							// shouldn't happen but report as default text anyway
 							report(source.Substring(group.Index, group.Length), null);
 						}
@@ -104,6 +125,13 @@ namespace River.OneMoreAddIn.Colorizer
 				}
 				else
 				{
+					if (match.Index > index)
+					{
+						// default text prior to match or in between matches
+						report(source.Substring(index, match.Index - index), null);
+						index = match.Index;
+					}
+
 					// captured end-of-line? or line break?
 					var group = match.Groups.Cast<Group>().Skip(1).FirstOrDefault(g => g.Success);
 

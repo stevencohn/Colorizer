@@ -12,13 +12,14 @@ namespace Colorizer
 	{
 		static void Main(string[] args)
 		{
-			Foo();
-			CSharp();
-			HTML();
-			JavaScript();
-			PowerShell();
-			Typescript();
-			XML();
+			//Foo();
+			//CSharp();
+			CSS();
+			//HTML();
+			//JavaScript();
+			//PowerShell();
+			//Typescript();
+			//XML();
 		}
 
 
@@ -46,6 +47,24 @@ namespace Colorizer
 
 			var one = colorizer.ColorizeOne(
 				"public void Foobar(int arg)\n{\n    var s = \"bubble\";\n}");
+
+			Console.WriteLine(one);
+		}
+
+
+		static void CSS()
+		{
+			Console.WriteLine();
+			Console.WriteLine("css------------------------------");
+
+			var colorizer = new Colorizer("css");
+
+			var one = colorizer.ColorizeOne(
+@"h1 {
+  color: white;
+  text-align: center;
+  /* comment */
+}");
 
 			Console.WriteLine(one);
 		}

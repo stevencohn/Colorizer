@@ -12,9 +12,10 @@ namespace Colorizer
 	{
 		static void Main(string[] args)
 		{
-			//Foo();
-			//CSharp();
-			//JavaScript();
+			Foo();
+			CSharp();
+			JavaScript();
+			PowerShell();
 			XML();
 		}
 
@@ -57,6 +58,20 @@ namespace Colorizer
 
 			var one = colorizer.ColorizeOne(
 				"var foo;\nfor (x in obj)\n{\n  console.out(x);\n}");
+
+			Console.WriteLine(one);
+		}
+
+
+		static void PowerShell()
+		{
+			Console.WriteLine();
+			Console.WriteLine("powershell-----------------------");
+
+			var colorizer = new Colorizer("powershell");
+
+			var one = colorizer.ColorizeOne(
+"<!--comment-->\n<foo>\n  <bar a=\"123\">whatever</bar>\n  <const><![CDATA[value]]></const>\n</foo>");
 
 			Console.WriteLine(one);
 		}

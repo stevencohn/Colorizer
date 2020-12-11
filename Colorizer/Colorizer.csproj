@@ -94,6 +94,9 @@
     <None Include="Languages\javascript.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Languages\powershell.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Languages\styles-light.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

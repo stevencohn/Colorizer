@@ -18,7 +18,9 @@ namespace Colorizer
 @"public void Foobar(int arg)
 {
     // comment
+
     var s = ""bubble"";
+
     /*
      * also a comment
      */

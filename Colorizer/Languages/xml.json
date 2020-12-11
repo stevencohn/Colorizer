@@ -28,7 +28,7 @@
         "XmlDelimiter"
       ]
     },
-    /*{
+    {
       "pattern": "(?i)(<\\?)([a-z][a-z0-9-]*)(?:\\s+([a-z0-9]+)(=)(\")([^\\n]*?)(\"))*(?:\\s+([a-z0-9]+)(=)(\\')([^\\n]*?)(\\'))*\\s*?(\\?>)",
       "captures": [
         "XmlDelimiter",
@@ -44,16 +44,6 @@
         "XmlAttributeValue",
         "XmlAttributeQuotes",
         "XmlDelimiter"
-      ]
-    },*/
-    {
-      "pattern": "(?xi)(<\\/)(?:([a-z][a-z0-9-])(:))?([a-z][a-z0-9-_\\.]*)(>)",
-      "captures": [
-        "XmlDelimeter",
-        "XmlName",
-        "XmlDelimeter",
-        "XmlName",
-        "XmlDelimeter"
       ]
     },
     {
@@ -75,6 +65,16 @@
         "XmlAttributeQuotes",
         "XmlAttribute",
         "XmlDelimiter"
+      ]
+    },
+    {
+      "pattern": "(?xi)(<\\/)(?:([a-z][a-z0-9-])(:))?([a-z][a-z0-9-_\\.]*)(>)",
+      "captures": [
+        "XmlDelimeter",
+        "XmlName",
+        "XmlDelimeter",
+        "XmlName",
+        "XmlDelimeter"
       ]
     },
     {

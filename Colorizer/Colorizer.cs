@@ -7,6 +7,7 @@ namespace River.OneMoreAddIn.Colorizer
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using System.Web;
 	using System.Xml.Linq;
 
 
@@ -85,8 +86,6 @@ namespace River.OneMoreAddIn.Colorizer
 			{
 				//System.Console.WriteLine($"'{code}' ({scope})");
 
-				code = System.Web.HttpUtility.HtmlEncode(code);
-
 				if (string.IsNullOrEmpty(code) && parser.HasMoreCaptures)
 				{
 					// end-of-line
@@ -94,6 +93,8 @@ namespace River.OneMoreAddIn.Colorizer
 				}
 				else
 				{
+					code = HttpUtility.HtmlEncode(code);
+
 					if (scope == null)
 					{
 						// plain text prior to capture

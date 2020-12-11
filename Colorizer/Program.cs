@@ -12,14 +12,17 @@ namespace Colorizer
 	{
 		static void Main(string[] args)
 		{
-			//Foo();
-			//CSharp();
+			Foo();
+			CSharp();
 			CSS();
-			//HTML();
-			//JavaScript();
-			//PowerShell();
-			//Typescript();
-			//XML();
+			HTML();
+			Java();
+			JavaScript();
+			PowerShell();
+			Python();
+			Typescript();
+			VB();
+			XML();
 		}
 
 
@@ -88,6 +91,22 @@ namespace Colorizer
 		}
 
 
+		static void Java()
+		{
+			Console.WriteLine();
+			Console.WriteLine("java-----------------------------");
+
+			var colorizer = new Colorizer("java");
+
+			var one = colorizer.ColorizeOne(
+@"public static void main(String[] args) {
+  float first = 12.0f, second = 24.5f;
+}");
+
+			Console.WriteLine(one);
+		}
+
+
 		static void JavaScript()
 		{
 			Console.WriteLine();
@@ -116,6 +135,21 @@ namespace Colorizer
 		}
 
 
+		static void Python()
+		{
+			Console.WriteLine();
+			Console.WriteLine("python---------------------------");
+
+			var colorizer = new Colorizer("python");
+
+			var one = colorizer.ColorizeOne(
+@"# Display the sum
+print('The sum of {0} and {1} is {2}'.format(num1, num2, sum))");
+
+			Console.WriteLine(one);
+		}
+
+
 		static void Typescript()
 		{
 			Console.WriteLine();
@@ -132,6 +166,26 @@ namespace Colorizer
   }
   await this.buildAndRecord(event.type, event.target);
 }");
+			Console.WriteLine(one);
+		}
+
+
+		static void VB()
+		{
+			Console.WriteLine();
+			Console.WriteLine("vb-------------------------------");
+
+			var colorizer = new Colorizer("vb");
+
+			var one = colorizer.ColorizeOne(
+@"Imports System
+  ' comment
+  Public Class Hello
+   Public Shared Sub Main(  )
+    Console.WriteLine(""hello, world"")
+   End Sub
+End Class");
+
 			Console.WriteLine(one);
 		}
 

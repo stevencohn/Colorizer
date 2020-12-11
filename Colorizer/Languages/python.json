@@ -1,0 +1,35 @@
+{
+  "name": "Python",
+  "rules": [
+    {
+      "pattern": "(#.*?)\\r?$",
+      "captures": [
+        "Comment"
+      ]
+    },
+    {
+      "pattern": "('[^\\n]*?(?<!\\\\)')",
+      "captures": [
+        "String"
+      ]
+    },
+    {
+      "pattern": "(\"[^\\n]*?(?<!\\\\)\")",
+      "captures": [
+        "String"
+      ]
+    },
+    {
+      "pattern": "\\b(break|continue|del|except|exec|finally|pass|print|raise|return|try|global|assert|lambda|yield|def|class|for|while|if|elif|else|and|in|is|not|or|import|from|as|async|await|None|True|False)\\b",
+      "captures": [
+        "Keyword"
+      ]
+    },
+    {
+      "pattern": "\\b([0-9]{1,})\\b",
+      "captures": [
+        "Number"
+      ]
+    }
+  ]
+}

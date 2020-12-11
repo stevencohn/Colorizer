@@ -44,6 +44,12 @@ namespace River.OneMoreAddIn.Colorizer
 		/// </param>
 		public void Parse(string source, Action<string, string> report)
 		{
+			#region Note
+			// Implementation note: Originally used Regex.Match and then iterated with NextMatch
+			// but there was no way to support the HasMoreCaptures property so switched to using
+			// Matches instead; slightly more complicated logic but the effect is the same.
+			#endregion Note
+
 			matches = language.Regex.Matches(source);
 
 			if (matches.Count == 0)
@@ -65,13 +71,6 @@ namespace River.OneMoreAddIn.Colorizer
 				//Console.WriteLine(
 				//	$"index:{match.Index}:{index} length:{match.Length} value:\"{match.Value}\"");
 
-				if (match.Index > index)
-				{
-					// default text prior to match
-					report(source.Substring(index, match.Index - index), null);
-					index = match.Index;
-				}
-
 				if (match.Length > 0)
 				{
 					// Groups will contain a list of all possible captures in the regex, for both
@@ -80,9 +79,16 @@ namespace River.OneMoreAddIn.Colorizer
 					// and indicates the group name which should be an index offset of the capture
 					// in the entire regex; we can use that to index the appropriate scope.
 
-					var groups = match.Groups.Cast<Group>().Skip(1).Where(g => g.Success).ToList();
+					var groups = match.Groups.Cast<Group>().Skip(1).Where(g => g.Success);
 					foreach (var group in groups)
 					{
+						if (group.Index > index)
+						{
+							// default text prior to match
+							report(source.Substring(index, group.Index - index), null);
+							index = group.Index;
+						}
+
 						if (int.TryParse(group.Name, out var scope))
 						{
 							report(source.Substring(group.Index, group.Length), language.Scopes[scope]);
@@ -92,9 +98,9 @@ namespace River.OneMoreAddIn.Colorizer
 							// shouldn't happen but report as default text anyway
 							report(source.Substring(group.Index, group.Length), null);
 						}
-					}
 
-					index = match.Index + match.Length;
+						index = group.Index + group.Length;
+					}
 				}
 				else
 				{

@@ -12,9 +12,9 @@ namespace Colorizer
 	{
 		static void Main(string[] args)
 		{
-			Foo();
-			CSharp();
-			JavaScript();
+			//Foo();
+			//CSharp();
+			//JavaScript();
 			XML();
 		}
 

@@ -80,16 +80,18 @@ namespace River.OneMoreAddIn.Colorizer
 					// and indicates the group name which should be an index offset of the capture
 					// in the entire regex; we can use that to index the appropriate scope.
 
-					var group = match.Groups.Cast<Group>().Skip(1).FirstOrDefault(g => g.Success);
-
-					if ((group != null) && int.TryParse(group.Name, out var scope))
+					var groups = match.Groups.Cast<Group>().Skip(1).Where(g => g.Success).ToList();
+					foreach (var group in groups)
 					{
-						report(source.Substring(match.Index, match.Length), language.Scopes[scope]);
-					}
-					else
-					{
-						// shouldn't happen but report as default text anyway
-						report(source.Substring(match.Index, match.Length), null);
+						if (int.TryParse(group.Name, out var scope))
+						{
+							report(source.Substring(group.Index, group.Length), language.Scopes[scope]);
+						}
+						else
+						{
+							// shouldn't happen but report as default text anyway
+							report(source.Substring(group.Index, group.Length), null);
+						}
 					}
 
 					index = match.Index + match.Length;

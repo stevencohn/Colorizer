@@ -14,13 +14,13 @@
       ]
     },
     {
-      "pattern": "'[^\\n]*?(?<!\\\\)'",
+      "pattern": "('[^\\n]*?(?<!\\\\)')",
       "captures": [
         "String"
       ]
     },
     {
-      "pattern": "(?s)@\".*?\"@",
+      "pattern": "(?s)(@\".*?\"@)",
       "captures": [
         "StringCSharpVerbatim"
       ]
@@ -32,13 +32,13 @@
       ]
     },
     {
-      "pattern": "\\$(?:[\\d\\w\\-]+(?::[\\d\\w\\-]+)?|\\$|\\?|\\^)",
+      "pattern": "(\\$(?:[\\d\\w\\-]+(?::[\\d\\w\\-]+)?|\\$|\\?|\\^))",
       "captures": [
         "PowerShellVariable"
       ]
     },
     {
-      "pattern": "\\${[^}]+}",
+      "pattern": "(\\${[^}]+})",
       "captures": [
         "PowerShellVariable"
       ]
@@ -50,25 +50,25 @@
       ]
     },
     {
-      "pattern": "-(?:c|i)?(?:eq|ne|gt|ge|lt|le|notlike|like|notmatch|match|notcontains|contains|replace)",
+      "pattern": "(-(?:c|i)?(?:eq|ne|gt|ge|lt|le|notlike|like|notmatch|match|notcontains|contains|replace))",
       "captures": [
         "PowerShellOperator"
       ]
     },
     {
-      "pattern": "-(?:band|and|as|join|not|bxor|xor|bor|or|isnot|is|split)",
+      "pattern": "(-(?:band|and|as|join|not|bxor|xor|bor|or|isnot|is|split))",
       "captures": [
         "PowerShellOperator"
       ]
     },
     {
-      "pattern": "(?:\\+=|-=|\\*=|/=|%=|=|\\+\\+|--|\\+|-|\\*|/|%)",
+      "pattern": "(\\+=|-=|\\*=|/=|%=|=|\\+\\+|--|\\+|-|\\*|/|%)",
       "captures": [
         "PowerShellOperator"
       ]
     },
     {
-      "pattern": "(?:\\>\\>|2\\>&1|\\>|2\\>\\>|2\\>)",
+      "pattern": "(\\>\\>|2\\>&1|\\>|2\\>\\>|2\\>)",
       "captures": [
         "PowerShellOperator"
       ]

@@ -71,8 +71,8 @@ namespace Colorizer
 			var colorizer = new Colorizer("powershell");
 
 			var one = colorizer.ColorizeOne(
-"<!--comment-->\n<foo>\n  <bar a=\"123\">whatever</bar>\n  <const><![CDATA[value]]></const>\n</foo>");
-
+"if ($rule.Enabled -eq $true) { Write-Host(\"Found enabled rule {0}\" -f $rule.DisplayName); }");
+ 
 			Console.WriteLine(one);
 		}
 

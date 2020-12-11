@@ -1,5 +1,9 @@
 {
   "name": "JavaScript",
+  "aliases": [
+    "js",
+    "json"
+  ],
   "rules": [
     {
       "pattern": "(/\\*(?:[^*]|[\\r\\n]|(?:\\*+(?:[^*/]|[\\r\\n])))*\\*+/)",
@@ -31,9 +35,5 @@
         "Keyword"
       ]
     }
-  ],
-  "aliases": [
-    "js",
-    "json"
   ]
 }

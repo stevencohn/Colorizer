@@ -1,5 +1,8 @@
 {
   "name": "PowerShell",
+  "aliases": [
+    "ps1"
+  ],
   "rules": [
     {
       "pattern": "(?s)(<\\#.*?\\#>)",
@@ -88,8 +91,5 @@
         "PowerShellOperator"
       ]
     }
-  ],
-  "aliases": [
-    "ps1"
   ]
 }

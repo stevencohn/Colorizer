@@ -1,5 +1,8 @@
 {
   "name": "XML",
+  "aliases": [
+    "xaml"
+  ],
   "rules": [
     {
       "pattern": "(\\<![ \\r\\n\\t]*(?:--(?:[^\\-]|[\\r\\n]|-[^\\-])*--[ \\r\\n\\t]*)\\>)",
@@ -91,8 +94,5 @@
         "XmlDelimiter"
       ]
     }
-  ],
-  "aliases": [
-    "xaml"
   ]
 }

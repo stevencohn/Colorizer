@@ -14,8 +14,10 @@ namespace Colorizer
 		{
 			Foo();
 			CSharp();
+			HTML();
 			JavaScript();
 			PowerShell();
+			Typescript();
 			XML();
 		}
 
@@ -49,6 +51,24 @@ namespace Colorizer
 		}
 
 
+		static void HTML()
+		{
+			Console.WriteLine();
+			Console.WriteLine("html-----------------------------");
+
+			var colorizer = new Colorizer("html");
+
+			var one = colorizer.ColorizeOne(
+@"<!DOCTYPE html>
+<html>
+<!--comment-->
+<div style=""color:blue;"">whatever &quot;To be&quot;</div>
+</html>");
+
+			Console.WriteLine(one);
+		}
+
+
 		static void JavaScript()
 		{
 			Console.WriteLine();
@@ -77,6 +97,26 @@ namespace Colorizer
 		}
 
 
+		static void Typescript()
+		{
+			Console.WriteLine();
+			Console.WriteLine("typescript-----------------------");
+
+			var colorizer = new Colorizer("typescript");
+
+			var one = colorizer.ColorizeOne(
+@"async onClickEvent(event: MouseEvent): Promise<void>
+{
+  if (this.stopEventPropagation)
+  {
+    event.stopPropagation();
+  }
+  await this.buildAndRecord(event.type, event.target);
+}");
+			Console.WriteLine(one);
+		}
+
+
 		static void XML()
 		{
 			Console.WriteLine();
@@ -85,7 +125,13 @@ namespace Colorizer
 			var colorizer = new Colorizer("xml");
 
 			var one = colorizer.ColorizeOne(
-"<!--comment-->\n<foo>\n  <bar a=\"123\">whatever</bar>\n  <const><![CDATA[value]]></const>\n</foo>");
+@"<?xml version=""1.0"" standalone=""no"" ?>
+<!DOCTYPE document SYSTEM ""subjects.dtd"">
+<!--comment-->
+<foo>
+  <bar a=""123"">whatever</bar>
+  <const><![CDATA[value]]></const>
+</foo>");
 
 			Console.WriteLine(one);
 		}

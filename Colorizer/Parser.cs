@@ -60,6 +60,10 @@ namespace River.OneMoreAddIn.Colorizer
 			// Matches instead; slightly more complicated logic but the effect is the same.
 			#endregion Note
 
+			// collapse \r\n sequence to just \n to make parsing easier;
+			// this sequence appears when using C# @"verbatim" multiline strings
+			source = Regex.Replace(source, @"(?:\r\n)|(?:\n\r)", "\n");
+
 			matches = language.Regex.Matches(source);
 
 			if (matches.Count == 0)
@@ -100,24 +104,12 @@ namespace River.OneMoreAddIn.Colorizer
 
 						if (int.TryParse(group.Name, out var scope))
 						{
-							var x = source.Substring(group.Index, group.Length);
-							if (x != group.Value)
-							{
-								throw new Exception($"value:{group.Value} != substr:{x}");
-							}
-
-							report(source.Substring(group.Index, group.Length), language.Scopes[scope]);
+							report(group.Value, language.Scopes[scope]);
 						}
 						else
 						{
-							var x = source.Substring(group.Index, group.Length);
-							if (x != group.Value)
-							{
-								throw new Exception($"value:{group.Value} != substr:{x}");
-							}
-
 							// shouldn't happen but report as default text anyway
-							report(source.Substring(group.Index, group.Length), null);
+							report(group.Value, null);
 						}
 
 						index = group.Index + group.Length;

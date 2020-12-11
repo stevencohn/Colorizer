@@ -21,6 +21,12 @@ namespace River.OneMoreAddIn.Colorizer
 		private readonly string rootPath;
 
 
+		/// <summary>
+		/// Initializes a new instance for the specified language.
+		/// </summary>
+		/// <param name="languageName">
+		/// The language name; should match the name of the language definition file
+		/// </param>
 		public Colorizer(string languageName)
 		{
 			rootPath = Path.Combine(
@@ -40,6 +46,12 @@ namespace River.OneMoreAddIn.Colorizer
 		}
 
 
+		/// <summary>
+		/// Colorizes the given source code for the current language, producing OneNote
+		/// content.
+		/// </summary>
+		/// <param name="source">The original source code text</param>
+		/// <returns>An XElement describing an OEChildren hierarchy</returns>
 		public XElement Colorize(string source)
 		{
 			var container = new XElement("OEChildren");
@@ -78,6 +90,12 @@ namespace River.OneMoreAddIn.Colorizer
 		}
 
 
+		/// <summary>
+		/// Colorizes the given source code for the current language, producting
+		/// raw HTML-style text with span elements and style attributes.
+		/// </summary>
+		/// <param name="source">The original source code text</param>
+		/// <returns></returns>
 		public string ColorizeOne(string source)
 		{
 			var builder = new StringBuilder();

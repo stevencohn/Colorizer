@@ -2,9 +2,7 @@
 // Copyright © 2020 Steven M Cohn.  All rights reserved.
 //************************************************************************************************
 
-//#pragma warning disable CA1032 // Implement standard exception constructors
-//#pragma warning disable CA2237 // Mark ISerializable types with serializable
-//#pragma warning disable S3871 // Exception types should be "public"
+#pragma warning disable S3871 // Exception types should be "public"
 
 namespace River.OneMoreAddIn.Colorizer
 {
@@ -21,7 +19,8 @@ namespace River.OneMoreAddIn.Colorizer
 		/// Constructor
 		/// </summary>
 		/// <param name="message">Message that describes this exception</param>
-		/// <param name="position">Position within expression where exception occurred</param>
+		/// <param name="name">The name of the language</param>
+		/// <param name="rule">The index of the offending rule in the ruleset</param>
 		public LanguageException(string message, string name, int rule) : base(message)
 		{
 			Name = name;

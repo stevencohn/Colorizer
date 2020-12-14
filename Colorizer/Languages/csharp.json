@@ -1,10 +1,24 @@
 {
-  "name": "CSharp",
+  "name": "C#",
   "aliases": [
-    "c#",
+    "CSharp",
     "cs"
   ],
   "rules": [
+    {
+      "pattern": "(/\\*[^\\r\\n]*)$",
+      "scope": "Comment",
+      "captures": [
+        "Comment"
+      ]
+    },
+    {
+      "pattern": "^([^\\r\\n]*\\*/)",
+      "scope": "",
+      "captures": [
+        "Comment"
+      ]
+    },
     {
       "pattern": "(/\\*(?:[^*]|[\\r\\n]|(?:\\*+(?:[^*/]|[\\r\\n])))*\\*+/)",
       "captures": [

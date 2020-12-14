@@ -28,11 +28,10 @@ namespace River.OneMoreAddIn.Colorizer
 			builder.Append("(?-xis)(?m)($)(?x)");
 			builder.AppendLine();
 
-			// 0th capture is always the entire string
-			// 1st capture is always the end-of-line
 			var scopes = new List<string>
 			{
-				"*", "$"
+				"*",  // 0th capture is always the entire string
+				"$"   // 1st capture is always the end-of-line
 			};
 
 			for (int i = 0; i < language.Rules.Count; i++)
@@ -56,7 +55,6 @@ namespace River.OneMoreAddIn.Colorizer
 			}
 
 			var compiled = (Language)language;
-			compiled.Rules.Clear();
 			compiled.Regex = new Regex(builder.ToString());
 			compiled.Scopes = scopes;
 

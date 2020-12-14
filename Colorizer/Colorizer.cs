@@ -4,6 +4,7 @@
 
 namespace River.OneMoreAddIn.Colorizer
 {
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
@@ -18,7 +19,6 @@ namespace River.OneMoreAddIn.Colorizer
 	{
 		private readonly Parser parser;
 		private readonly ITheme theme;
-		private readonly string rootPath;
 
 
 		/// <summary>
@@ -27,13 +27,10 @@ namespace River.OneMoreAddIn.Colorizer
 		/// <param name="languageName">
 		/// The language name; should match the name of the language definition file
 		/// </param>
-		public Colorizer(string languageName)
+		public Colorizer(string languageName, string themeName = "light")
 		{
-			rootPath = Path.Combine(
-				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-				"Languages");
-
-			var path = Path.Combine(rootPath, $"{languageName}.json");
+			var root = GetColorizerDirectory();
+			var path = Path.Combine(root, $@"Languages\{languageName}.json");
 
 			if (!File.Exists(path))
 			{
@@ -42,7 +39,7 @@ namespace River.OneMoreAddIn.Colorizer
 
 			parser = new Parser(Compiler.Compile(Provider.LoadLanguage(path)));
 
-			theme = Provider.LoadTheme(Path.Combine(rootPath, $"styles-light.json"));
+			theme = Provider.LoadTheme(Path.Combine(root, $@"Themes\{themeName}-theme.json"));
 		}
 
 
@@ -52,20 +49,18 @@ namespace River.OneMoreAddIn.Colorizer
 		/// </summary>
 		/// <param name="source">The original source code text</param>
 		/// <returns>An XElement describing an OEChildren hierarchy</returns>
-		public XElement Colorize(string source)
+		public XElement Colorize(string source, XNamespace ns)
 		{
-			var container = new XElement("OEChildren");
+			var container = new XElement(ns + "OEChildren");
 			var builder = new StringBuilder();
 
 			parser.Parse(source, (code, scope) =>
 			{
-				//System.Console.WriteLine($"'{code}' ({scope})");
-
 				if (string.IsNullOrEmpty(code))
 				{
 					// end-of-line
-					container.Add(new XElement("OE",
-						new XElement("T",
+					container.Add(new XElement(ns + "OE",
+						new XElement(ns + "T",
 							new XCData(builder.ToString()))
 						));
 
@@ -102,8 +97,6 @@ namespace River.OneMoreAddIn.Colorizer
 
 			parser.Parse(source, (code, scope) =>
 			{
-				//System.Console.WriteLine($"'{code}' ({scope})");
-
 				if (string.IsNullOrEmpty(code) && parser.HasMoreCaptures)
 				{
 					// end-of-line
@@ -128,6 +121,30 @@ namespace River.OneMoreAddIn.Colorizer
 			});
 
 			return builder.ToString();
+		}
+
+
+		/// <summary>
+		/// Returns the root path of the directory containing the Colorizer language and theme
+		/// definitions
+		/// </summary>
+		/// <returns></returns>
+		public static string GetColorizerDirectory()
+		{
+			return Path.Combine(
+				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+				""); // "Colorizer");
+		}
+
+		/// <summary>
+		/// Gets a list of available language names
+		/// </summary>
+		/// <param name="dirPath">The directory path containing the language definition files</param>
+		/// <returns></returns>
+		public static IDictionary<string, string> LoadLanguageNames()
+		{
+			return Provider.LoadLanguageNames(
+				Path.Combine(GetColorizerDirectory(), "Languages"));
 		}
 	}
 }

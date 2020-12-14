@@ -6,6 +6,7 @@ namespace Colorizer
 {
 	using River.OneMoreAddIn.Colorizer;
 	using System;
+	using System.Xml.Linq;
 
 
 	class Program
@@ -24,7 +25,7 @@ namespace Colorizer
     /*
      * also a comment
      */
-}");
+}", (XNamespace)"one");
 
 			//Console.WriteLine("<html>");
 			//Console.WriteLine("<body>");

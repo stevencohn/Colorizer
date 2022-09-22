@@ -22,10 +22,10 @@ namespace ColorizerTests
 			var language = Provider.LoadLanguage(path);
 
 			Assert.IsNotNull(language);
-			Assert.AreEqual(language.Name, "Foo");
+			Assert.AreEqual("Foo", language.Name);
 			Assert.IsTrue(language.Rules.Count > 0);
 			Assert.IsTrue(language.Rules[0].Captures.Count > 0);
-			Assert.AreEqual(language.Rules[0].Captures[0], "comment");
+			Assert.AreEqual("comment", language.Rules[0].Captures[0]);
 
 			var compiled = Compiler.Compile(language);
 
@@ -50,7 +50,7 @@ namespace ColorizerTests
 			var language = new Language
 			{
 				Name = "foo",
-				Rules = new List<IRule>
+				Rules = new List<Rule>
 				{
 					new Rule
 					{
@@ -61,6 +61,7 @@ namespace ColorizerTests
 			};
 
 			var compiled = Compiler.Compile(language);
+			Console.WriteLine($"compiled:{compiled}");
 		}
 	}
 }

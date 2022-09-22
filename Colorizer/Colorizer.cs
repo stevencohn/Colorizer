@@ -19,6 +19,7 @@ namespace River.OneMoreAddIn.Colorizer
 	{
 		private readonly Parser parser;
 		private readonly ITheme theme;
+		private readonly bool autoOverride;
 
 
 		/// <summary>
@@ -27,8 +28,15 @@ namespace River.OneMoreAddIn.Colorizer
 		/// <param name="languageName">
 		/// The language name; should match the name of the language definition file
 		/// </param>
-		public Colorizer(string languageName, string themeName = "light")
+		/// <param name="themeName">Must be "light" or "dark"</param>
+		/// <param name="autoOverride">
+		/// True to use color overrides from theme file; this is need in dark mode
+		/// when the page color is auto to change the plain text color
+		/// </param>
+		public Colorizer(string languageName, string themeName, bool autoOverride)
 		{
+			this.autoOverride = autoOverride;
+
 			var root = GetColorizerDirectory();
 			var path = Path.Combine(root, $@"Languages\{languageName}.json");
 
@@ -39,7 +47,8 @@ namespace River.OneMoreAddIn.Colorizer
 
 			parser = new Parser(Compiler.Compile(Provider.LoadLanguage(path)));
 
-			theme = Provider.LoadTheme(Path.Combine(root, $@"Themes\{themeName}-theme.json"));
+			theme = Provider.LoadTheme(
+				Path.Combine(root, $@"Themes\{themeName}-theme.json"), autoOverride);
 		}
 
 
@@ -71,12 +80,28 @@ namespace River.OneMoreAddIn.Colorizer
 					if (scope == null)
 					{
 						// plain text prior to capture
-						builder.Append(code.Replace("\t", " "));
+						code = code.Replace("\t", " ");
+						if (theme != null)
+						{
+							var style = theme.GetStyle("plaintext");
+							builder.Append(style == null ? code : style.Apply(code));
+						}
+						else
+						{
+							builder.Append(code);
+						}
 					}
 					else
 					{
-						var style = theme.GetStyle(scope);
-						builder.Append(style == null ? code : style.Apply(code));
+						if (theme != null)
+						{
+							var style = theme.GetStyle(scope);
+							builder.Append(style == null ? code : style.Apply(code));
+						}
+						else
+						{
+							builder.Append(code);
+						}
 					}
 				}
 			});
@@ -110,12 +135,29 @@ namespace River.OneMoreAddIn.Colorizer
 					{
 						// plain text prior to capture
 						// simple conversion of tabs to spaces (shouldn't be tabs in OneNote)
-						builder.Append(code.Replace("\t", " "));
+						code = code.Replace("\t", " ");
+
+						if (theme != null)
+						{
+							var style = theme.GetStyle("plaintext");
+							builder.Append(style == null ? code : style.Apply(code));
+						}
+						else
+						{
+							builder.Append(code);
+						}
 					}
 					else
 					{
-						var style = theme.GetStyle(scope);
-						builder.Append(style == null ? code : style.Apply(code));
+						if (theme != null)
+						{
+							var style = theme.GetStyle(scope);
+							builder.Append(style == null ? code : style.Apply(code));
+						}
+						else
+						{
+							builder.Append(code);
+						}
 					}
 				}
 			});

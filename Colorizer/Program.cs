@@ -13,7 +13,7 @@ namespace Colorizer
 	{
 		static void Main(string[] args)
 		{
-			var colorizer = new Colorizer("csharp");
+			var colorizer = new Colorizer("csharp", "light", false);
 
 			var one = colorizer.Colorize(
 @"public void Foobar(int arg)

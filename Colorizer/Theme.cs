@@ -81,7 +81,7 @@ namespace River.OneMoreAddIn.Colorizer
 		/// </summary>
 		/// <param name="name">The name of a style defined by this theme</param>
 		/// <returns>An IStyle of the style</returns>
-		IStyle GetStyle(string name);
+		Style GetStyle(string name);
 	}
 
 
@@ -92,17 +92,25 @@ namespace River.OneMoreAddIn.Colorizer
 	{
 		public Dictionary<string, string> Colors { get; set; }
 
-		public List<IStyle> Styles { get; set; }
+		public List<Style> Styles { get; set; }
 
-		public IStyle GetStyle(string name)
+		public Style GetStyle(string name)
 		{
 			return Styles.FirstOrDefault(s => s.Name == name);
 		}
 
 
-		public void TranslateColorNames()
+		public void TranslateColorNames(bool autoOverride)
 		{
-			foreach (var style in Styles.Cast<Style>())
+			if (autoOverride)
+			{
+				if (Colors.ContainsKey("DarkPlainText") && Colors.ContainsKey("AutoPlainText"))
+				{
+					Colors["DarkPlainText"] = Colors["AutoPlainText"];
+				}
+			}
+
+			foreach (var style in Styles)
 			{
 				// standardize on lowercase names because users are stupid
 				style.Name = style.Name.ToLower();
@@ -124,16 +132,12 @@ namespace River.OneMoreAddIn.Colorizer
 				color = Colors[color];
 
 				// normalize color as 6-byte hex HTML color string
-
-				//return ColorTranslator.FromHtml(color).ToRGBHtml();
-				var c = ColorTranslator.FromHtml(color);
-				return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+				return ColorTranslator.FromHtml(color).ToRGBHtml();
 			}
 
 			if (color.StartsWith("#"))
 			{
-				var c = ColorTranslator.FromHtml(color);
-				return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+				return ColorTranslator.FromHtml(color).ToRGBHtml();
 			}
 
 			return color;

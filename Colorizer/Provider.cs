@@ -7,8 +7,7 @@ namespace River.OneMoreAddIn.Colorizer
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using System.Text.Json;
-	using System.Text.Json.Serialization;
+	using System.Web.Script.Serialization;
 
 
 	internal static class Provider
@@ -21,21 +20,18 @@ namespace River.OneMoreAddIn.Colorizer
 		/// <returns>An ILanguage describing the langauge</returns>
 		public static ILanguage LoadLanguage(string path)
 		{
-			var serializeOptions = new JsonSerializerOptions
-			{
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-				ReadCommentHandling = JsonCommentHandling.Skip,
-				AllowTrailingCommas = true,
-
-				Converters =
-				{
-					// handles interface->class conversion
-					new RuleConverter()
-				}
-			};
-
 			var json = File.ReadAllText(path);
-			var language = JsonSerializer.Deserialize<Language>(json, serializeOptions);
+			var serializer = new JavaScriptSerializer();
+			Language language = null;
+
+			try
+			{
+				language = serializer.Deserialize<Language>(json);
+			}
+			catch (Exception exc)
+			{
+				Console.WriteLine($"error loading language {path}", exc);
+			}
 
 			return language;
 		}
@@ -58,7 +54,10 @@ namespace River.OneMoreAddIn.Colorizer
 			foreach (var file in Directory.GetFiles(dirPath, "*.json"))
 			{
 				var language = LoadLanguage(file);
-				names.Add(language.Name, Path.GetFileNameWithoutExtension(file));
+				if (language != null)
+				{
+					names.Add(language.Name, Path.GetFileNameWithoutExtension(file));
+				}
 			}
 
 			return names;
@@ -69,64 +68,25 @@ namespace River.OneMoreAddIn.Colorizer
 		/// Loads a syntax coloring theme from the given file path
 		/// </summary>
 		/// <param name="path"></param>
+		/// <param name="autoOverride"></param>
 		/// <returns></returns>
-		public static ITheme LoadTheme(string path)
+		public static ITheme LoadTheme(string path, bool autoOverride)
 		{
-			var serializeOptions = new JsonSerializerOptions
-			{
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-				ReadCommentHandling = JsonCommentHandling.Skip,
-				AllowTrailingCommas = true,
-
-				Converters =
-				{
-					// handles interface->class conversion
-					new StyleConverter()
-				}
-			};
-
 			var json = File.ReadAllText(path);
-			var theme = JsonSerializer.Deserialize<Theme>(json, serializeOptions);
+			var serializer = new JavaScriptSerializer();
+			Theme theme = null;
 
-			theme.TranslateColorNames();
+			try
+			{
+				theme = serializer.Deserialize<Theme>(json);
+				theme.TranslateColorNames(autoOverride);
+			}
+			catch (Exception exc)
+			{
+				Console.WriteLine($"error loading theme {path}", exc);
+			}
 
 			return theme;
-		}
-	}
-
-
-	internal class RuleConverter : JsonConverter<IRule>
-	{
-		public override IRule Read(
-			ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-		{
-			// convert from ILanguageRule to LanguageRule
-			return JsonSerializer.Deserialize<Rule>(ref reader, options);
-		}
-
-		public override void Write(
-			Utf8JsonWriter writer, IRule value, JsonSerializerOptions options)
-		{
-			// we're not serializing so this isn't used
-			throw new NotImplementedException();
-		}
-	}
-
-
-	internal class StyleConverter : JsonConverter<IStyle>
-	{
-		public override IStyle Read(
-			ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-		{
-			// convert from IStyle to Style
-			return JsonSerializer.Deserialize<Style>(ref reader, options);
-		}
-
-		public override void Write(
-			Utf8JsonWriter writer, IStyle value, JsonSerializerOptions options)
-		{
-			// we're not serializing so this isn't used
-			throw new NotImplementedException();
 		}
 	}
 }
